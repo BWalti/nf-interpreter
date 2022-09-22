@@ -84,4 +84,4 @@ struct Library_sys_dev_I2s_native_System_Device_I2s_I2sDevice
 
 extern const CLR_RT_NativeAssemblyData g_CLR_AssemblyNative_System_Device_I2s;
 
-#endif  //SYS_DEV_I2S_NATIVE_H
+#endif // SYS_DEV_I2S_NATIVE_H

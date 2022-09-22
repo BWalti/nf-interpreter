@@ -38,17 +38,23 @@ HRESULT SetI2sConfig(i2s_port_t bus, CLR_RT_HeapBlock *config)
     pin_config.data_out_num = (gpio_num_t)Esp32_GetMappedDevicePins(DEV_TYPE_I2S, bus, 3);
     pin_config.data_in_num = (gpio_num_t)Esp32_GetMappedDevicePins(DEV_TYPE_I2S, bus, 4);
 
-    CLR_Debug::Printf("bck=%d,ws=%d,dto=%d,dti=%d\n",pin_config.bck_io_num,pin_config.ws_io_num,pin_config.data_out_num,pin_config.data_in_num);
+    CLR_Debug::Printf(
+        "bck=%d,ws=%d,dto=%d,dti=%d\n",
+        pin_config.bck_io_num,
+        pin_config.ws_io_num,
+        pin_config.data_out_num,
+        pin_config.data_in_num);
 
     i2s_config_t conf;
     conf.mode = (i2s_mode_t)config[I2sConnectionSettings::FIELD___i2sMode].NumericByRef().s4;
     conf.sample_rate = (i2s_bits_per_sample_t)config[I2sConnectionSettings::FIELD___sampleRate].NumericByRef().s4;
-    conf.bits_per_sample = (i2s_bits_per_sample_t)config[I2sConnectionSettings::FIELD___i2sBitsPerSample].NumericByRef().s4;
+    conf.bits_per_sample =
+        (i2s_bits_per_sample_t)config[I2sConnectionSettings::FIELD___i2sBitsPerSample].NumericByRef().s4;
     conf.channel_format = (i2s_channel_fmt_t)config[I2sConnectionSettings::FIELD___i2sChannelFormat].NumericByRef().s4;
-    
+
     int commformat = config[I2sConnectionSettings::FIELD___i2sConnectionFormat].NumericByRef().s4;
     // Important: this will have to have to be adjusted for IDF4
-    switch(commformat)
+    switch (commformat)
     {
         case I2sCommunicationFormat_PcmLong:
             commformat = I2S_COMM_FORMAT_PCM_LONG;
@@ -74,7 +80,7 @@ HRESULT SetI2sConfig(i2s_port_t bus, CLR_RT_HeapBlock *config)
             break;
     }
     // I2sCommunicationFormat
-    
+
     conf.communication_format = (i2s_comm_format_t)commformat;
     // As recommended from the sample
     conf.intr_alloc_flags = ESP_INTR_FLAG_LEVEL1;
@@ -82,7 +88,13 @@ HRESULT SetI2sConfig(i2s_port_t bus, CLR_RT_HeapBlock *config)
     conf.dma_buf_count = 2;
     conf.dma_buf_len = 128;
 
-    CLR_Debug::Printf("mod=%d,rate=%d,chfrmt=%d,chfrmt=%d,commfrmt=%d\n",conf.mode,conf.sample_rate,conf.bits_per_sample,conf.channel_format,conf.communication_format);
+    CLR_Debug::Printf(
+        "mod=%d,rate=%d,chfrmt=%d,chfrmt=%d,commfrmt=%d\n",
+        conf.mode,
+        conf.sample_rate,
+        conf.bits_per_sample,
+        conf.channel_format,
+        conf.communication_format);
 
     // If this is first device on Bus then init driver
     if (Esp_I2S_Initialised_Flag[bus] == 0)
